@@ -12,4 +12,4 @@ const inboxPath = path.resolve(__dirname, 'contracts', 'Inbox.sol');
 // 2. read source code 
 const source = fs.readFileSync(inboxPath, 'utf8');
 // 3. compile source code / numbers of contracts
-solc.compile(source, 1);
+module.exports = solc.compile(source, 1).contracts[':Inbox'];
