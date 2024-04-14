@@ -1,24 +1,28 @@
 //Testing Contract by using Mocha
 // assertions of code 
-import assert from 'assert';
+const assert = require('assert');
 // generate local ethereum network
-import pkg from 'ganache';
-const { provider } = pkg;
+const ganache = require('ganache');
 // Web3 constructor function, should be capitalized
-import Web3 from 'web3';
+const { Web3 } = require('web3');
 // Web3 instance + network provider 
-const web3 = new Web3(provider());
+const web3 = new Web3(ganache.provider());
+// import compiled code
+const { interface, bytecode } = require('../compile');
 
 let accounts;
+let inbox;
 beforeEach(async () => { 
     // Get a list of all accounts
     accounts = await web3.eth.getAccounts();
     // Use one of those accounts to deploy
-
+    inbox = await new web3.eth.Contract(JSON.parse(interface))
+    .deploy({ data: bytecode, arguments: ['Hi im initial message'] })
+    .send({ from: accounts[0], gas: '10000000' })
 });
 
 describe('Inbox', () => {
     it('deploys a contract', () => {
-        console.log(accounts);
+        console.log(inbox);
     });
 });
